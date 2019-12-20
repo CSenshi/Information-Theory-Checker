@@ -85,169 +85,43 @@ fi
 echo
 echo "Starting Tests..."
 
-# Run Simple Comparision
 run_test_compare(){
-    TNAME="$1"
-    PROG_NAME="$2"
-    TEST_SUB_FOLD="$3"
-    TNUM="$4"
+    UTILS='../utils'
+    RUN_TEST="${UTILS}/run_test_compare.sh"
     
-    echo
-    echo "### Checking ${TNAME}"
+    PROBLEM_NAME="$1"
+    PROGRAM_NAME="$2"
+    TEST_SUB_FOLDER="$3"
+    TOTAL_TEST="$4"
     
-    SCRIPT=${SCRIPT_FOLDER_PATH}/${PROG_NAME}
-    TESTS=${TEST_FOLDER_PATH}/${TEST_SUB_FOLD}/
-    RES_DIR=${RESULT_DIR_NAME}/${TEST_SUB_FOLD}/
-    
-    if [ ! -f "${SCRIPT}" ]; then
-        echo "Script not found (Try using -e flag)"
-        return
-    fi
-    
-    if [ -d "${RES_DIR}" ]; then
-        rm -rf ${RES_DIR}
-    fi
-    mkdir $RES_DIR
-    eval compare_files \"${SCRIPT}\" \"${TESTS}\" \"${RES_DIR}\" "${TNUM}"
+    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
 }
 
-compare_files(){
-    SCRIPT_PATH=$1
-    PTEST_DIR_NAME=$2
-    RES_DIR_NAME=$3
-    TNUM=$4
-    
-    FNAME=${SCRIPT_PATH%.*}
-    FNAME=${FNAME##*/}
-    
-    for i in $(seq 1 $TNUM);
-    do
-        while [ ${#i} -lt 3 ]; do
-            i=0$i
-        done
-        
-        CURRENT_TEST=${PTEST_DIR_NAME}${i}.dat
-        CURRENT_TEST_ANS=${PTEST_DIR_NAME}${i}.ans
-        DEST_FILE_NAME=${RES_DIR_NAME}/${FNAME}_${i}.txt
-        
-        # launch your python script
-        eval ${INTERPRETER} ${SCRIPT_PATH} \"$CURRENT_TEST\" "${DEST_FILE_NAME}"
-        
-        # check if correct
-        echo "Test ${i} : $(eval diff -w -q \"$CURRENT_TEST_ANS\" \"$DEST_FILE_NAME\" && echo "Success: files are same!" || echo "Failed: files are different")"
-    done
-}
-
-# Compare files that require checker scripts
 run_test_with_checkers(){
-    TNAME="$1"
-    PROG_NAME="$2"
-    TEST_SUB_FOLD="$3"
-    TNUM="$4"
-    TEST_SCRIPT="$5"
+    UTILS='../utils'
+    RUN_TEST="${UTILS}/run_test_with_checkers.sh"
     
-    echo
-    echo "### Checking ${TNAME}"
+    PROBLEM_NAME="$1"
+    PROGRAM_NAME="$2"
+    TEST_SUB_FOLDER="$3"
+    TOTAL_TEST="$4"
+    PYTHON_TEST="$5"
     
-    SCRIPT=${SCRIPT_FOLDER_PATH}/${PROG_NAME}
-    TESTS=${TEST_FOLDER_PATH}/${TEST_SUB_FOLD}/
-    RES_DIR=${RESULT_DIR_NAME}/${TEST_SUB_FOLD}/
-    
-    if [ ! -f "${SCRIPT}" ]; then
-        echo "Script not found (Try using -e flag)"
-        return
-    fi
-    
-    if [ -d "${RES_DIR}" ]; then
-        rm -rf ${RES_DIR}
-    fi
-    mkdir $RES_DIR
-    eval compare_files_with_checker \"${SCRIPT}\" \"${TESTS}\" \"${RES_DIR}\" "${TNUM}" ${TEST_SCRIPT}
+    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${PYTHON_TEST}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}" "${TESTER_SCRIPT_FOLDER}" "${PYTHON3}"
 }
 
-compare_files_with_checker(){
-    SCRIPT_PATH=$1
-    PTEST_DIR_NAME=$2
-    RES_DIR_NAME=$3
-    TNUM=$4
-    TEST_SCRIPT=$5
-    
-    FNAME=${SCRIPT_PATH%.*}
-    FNAME=${FNAME##*/}
-    
-    for i in $(seq 1 $TNUM);
-    do
-        while [ ${#i} -lt 3 ]; do
-            i=0$i
-        done
-        
-        CURRENT_TEST=${PTEST_DIR_NAME}${i}.dat
-        CURRENT_TEST_ANS=${PTEST_DIR_NAME}${i}.ans
-        DEST_FILE_NAME=${RES_DIR_NAME}/${FNAME}_${i}.txt
-        
-        # launch your python script
-        eval ${INTERPRETER} ${SCRIPT_PATH} \"$CURRENT_TEST\" "${DEST_FILE_NAME}"
-        
-        # check if correct
-        echo "Test ${i}: "
-        ${PYTHON3} "${TESTER_SCRIPT_FOLDER}/${TEST_SCRIPT}" "$CURRENT_TEST_ANS" "${DEST_FILE_NAME}"
-        echo
-    done
-}
-
-# Test for problems that need .ans .dat and .code files
 run_test_compare_2args(){
-    TNAME="$1"
-    PROG_NAME="$2"
-    TEST_SUB_FOLD="$3"
-    TNUM="$4"
+    UTILS='../utils'
+    RUN_TEST="${UTILS}/run_test_compare_2args.sh"
     
-    echo
-    echo "### Checking ${TNAME}"
+    PROBLEM_NAME="$1"
+    PROGRAM_NAME="$2"
+    TEST_SUB_FOLDER="$3"
+    TOTAL_TEST="$4"
     
-    SCRIPT=${SCRIPT_FOLDER_PATH}/${PROG_NAME}
-    TESTS=${TEST_FOLDER_PATH}/${TEST_SUB_FOLD}/
-    RES_DIR=${RESULT_DIR_NAME}/${TEST_SUB_FOLD}/
-    
-    if [ ! -f "${SCRIPT}" ]; then
-        echo "Script not found (Try using -e flag)"
-        return
-    fi
-    
-    if [ -d "${RES_DIR}" ]; then
-        rm -rf ${RES_DIR}
-    fi
-    mkdir $RES_DIR
-    eval compare_files_2args \"${SCRIPT}\" \"${TESTS}\" \"${RES_DIR}\" "${TNUM}"
+    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
 }
 
-compare_files_2args(){
-    SCRIPT_PATH=$1
-    PTEST_DIR_NAME=$2
-    RES_DIR_NAME=$3
-    TNUM=$4
-    
-    FNAME=${SCRIPT_PATH%.*}
-    FNAME=${FNAME##*/}
-    
-    for i in $(seq 1 $TNUM);
-    do
-        while [ ${#i} -lt 3 ]; do
-            i=0$i
-        done
-        
-        CURRENT_TEST=${PTEST_DIR_NAME}${i}.dat
-        CURRENT_TEST_CODE=${PTEST_DIR_NAME}${i}.code
-        CURRENT_TEST_ANS=${PTEST_DIR_NAME}${i}.ans
-        DEST_FILE_NAME=${RES_DIR_NAME}/${FNAME}_${i}.txt
-        
-        # launch your python script
-        eval ${INTERPRETER} ${SCRIPT_PATH} \"$CURRENT_TEST_CODE\" \"$CURRENT_TEST\" "${DEST_FILE_NAME}"
-        
-        # check if correct
-        echo "Test ${i} : $(eval diff -w -q \"$CURRENT_TEST_ANS\" \"$DEST_FILE_NAME\" && echo "Success: files are same!" || echo "Failed: files are different")"
-    done
-}
 
 run_test_compare "Distrib" "Distrib${EXTENSION}" "A" 2
 run_test_compare "Entropy" "Entropy${EXTENSION}" "B" 2

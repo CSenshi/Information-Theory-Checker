@@ -74,59 +74,21 @@ fi
 echo
 echo "Starting Tests..."
 
-compare_files(){
-    SCRIPT_PATH=$1
-    PTEST_DIR_NAME=$2
-    RES_DIR_NAME=$3
-    TNUM=$4
+
+
+run_test_compare(){
+    UTILS='../utils'
+    RUN_TEST="${UTILS}/run_test_compare.sh"
     
-    FNAME=${SCRIPT_PATH%.*}
-    FNAME=${FNAME##*/}
+    PROBLEM_NAME="$1"
+    PROGRAM_NAME="$2"
+    TEST_SUB_FOLDER="$3"
+    TOTAL_TEST="$4"
     
-    for i in $(seq 1 $TNUM);
-    do
-        while [ ${#i} -lt 3 ]; do
-            i=0$i
-        done
-        
-        CURRENT_TEST=${PTEST_DIR_NAME}${i}.dat
-        CURRENT_TEST_ANS=${PTEST_DIR_NAME}${i}.ans
-        DEST_FILE_NAME=${RES_DIR_NAME}/${FNAME}_${i}.txt
-        
-        # launch your python script
-        eval ${INTERPRETER} ${SCRIPT_PATH} \"$CURRENT_TEST\" "${DEST_FILE_NAME}"
-        
-        # check if correct
-        echo "Test ${i} : $(eval cmp --silent \"$CURRENT_TEST_ANS\" \"$DEST_FILE_NAME\" && echo "Success: files are same!" || echo "Failed: files are different")"
-    done
+    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
 }
 
-run_test(){
-    TNAME="$1"
-    PROG_NAME="$2"
-    TEST_SUB_FOLD="$3"
-    TNUM="$4"
-    
-    echo
-    echo "### Checking ${TNAME}"
-    
-    SCRIPT=${SCRIPT_FOLDER_PATH}/${PROG_NAME}
-    TESTS=${TEST_FOLDER_PATH}/${TEST_SUB_FOLD}/
-    RES_DIR=${RESULT_DIR_NAME}/${TEST_SUB_FOLD}/
-    
-    if [ ! -f "${SCRIPT}" ]; then
-        echo "Script not found (Try using -e flag)"
-        return
-    fi
-    
-    if [ -d "${RES_DIR}" ]; then
-        rm -rf ${RES_DIR}
-    fi
-    mkdir $RES_DIR
-    eval compare_files \"${SCRIPT}\" \"${TESTS}\" \"${RES_DIR}\" "${TNUM}"
-}
-
-run_test "Simple Read" "SimpleRead${EXTENSION}" "A" 5
-run_test "Simple Write" "SimpleWrite${EXTENSION}" "B" 5
-run_test "Complete Write" "CompleteWrite${EXTENSION}" "C" 10
-run_test "Complete Read" "CompleteRead${EXTENSION}" "D" 10
+run_test_compare "Simple Read" "SimpleRead${EXTENSION}" "A" 5
+run_test_compare "Simple Write" "SimpleWrite${EXTENSION}" "B" 5
+run_test_compare "Complete Write" "CompleteWrite${EXTENSION}" "C" 10
+run_test_compare "Complete Read" "CompleteRead${EXTENSION}" "D" 10
