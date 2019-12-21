@@ -1,17 +1,13 @@
+# !/bin/bash
 
-# Compare files that require checker scripts
 TNAME="$1"
 PROG_NAME="$2"
 TEST_SUB_FOLD="$3"
 TNUM="$4"
-TEST_SCRIPT="$5"
-
-SCRIPT_FOLDER_PATH="$6"
-TEST_FOLDER_PATH="$7"
-RESULT_DIR_NAME="$8"
-INTERPRETER="$9"
-TESTER_SCRIPT_FOLDER="${10}"
-PYTHON3="${11}"
+SCRIPT_FOLDER_PATH="$5"
+TEST_FOLDER_PATH="$6"
+RESULT_DIR_NAME="$7"
+INTERPRETER="$8"
 
 echo
 echo "### Checking ${TNAME}"
@@ -30,12 +26,11 @@ if [ -d "${RES_DIR}" ]; then
 fi
 mkdir $RES_DIR
 
-compare_files_with_checker(){
+compare_files3(){
     SCRIPT_PATH=$1
     PTEST_DIR_NAME=$2
     RES_DIR_NAME=$3
     TNUM=$4
-    TEST_SCRIPT=$5
     
     FNAME=${SCRIPT_PATH%.*}
     FNAME=${FNAME##*/}
@@ -47,17 +42,13 @@ compare_files_with_checker(){
         done
         
         CURRENT_TEST=${PTEST_DIR_NAME}${i}.dat
-        CURRENT_TEST_ANS=${PTEST_DIR_NAME}${i}.ans
+        CURRENT_TEST_NUM=${PTEST_DIR_NAME}${i}.num
         DEST_FILE_NAME=${RES_DIR_NAME}/${FNAME}_${i}.txt
+        GENERATED_CODE_DIR_NAME=${RES_DIR_NAME}/${FNAME}_
         
         # launch your python script
-        eval ${INTERPRETER} ${SCRIPT_PATH} \"$CURRENT_TEST\" "${DEST_FILE_NAME}"
+        eval ${INTERPRETER} ${SCRIPT_PATH} \"$CURRENT_TEST\" \"$CURRENT_TEST_NUM\" "${DEST_FILE_NAME}"
         
-        # check if correct
-        echo "Test ${i}: "
-        ${PYTHON3} "${TESTER_SCRIPT_FOLDER}/${TEST_SCRIPT}" "$CURRENT_TEST_ANS" "${DEST_FILE_NAME}" "${CURRENT_TEST}"
-        echo
     done
 }
-
-eval compare_files_with_checker \"${SCRIPT}\" \"${TESTS}\" \"${RES_DIR}\" "${TNUM}" ${TEST_SCRIPT}
+eval compare_files3 \"${SCRIPT}\" \"${TESTS}\" \"${RES_DIR}\" "${TNUM}"
