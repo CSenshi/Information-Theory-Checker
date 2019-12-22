@@ -4,10 +4,12 @@ TNAME="$1"
 PROG_NAME="$2"
 TEST_SUB_FOLD="$3"
 TNUM="$4"
-SCRIPT_FOLDER_PATH="$5"
-TEST_FOLDER_PATH="$6"
-RESULT_DIR_NAME="$7"
-INTERPRETER="$8"
+ARG1_FILE_EXTENSION="$5"
+ARG2_FILE_EXTENSION="$6"
+SCRIPT_FOLDER_PATH="$7"
+TEST_FOLDER_PATH="$8"
+RESULT_DIR_NAME="$9"
+INTERPRETER="${10}"
 
 echo
 echo "### Checking ${TNAME}"
@@ -42,8 +44,8 @@ compare_files_2args(){
             i=0$i
         done
         
-        CURRENT_TEST=${PTEST_DIR_NAME}${i}.dat
-        CURRENT_TEST_CODE=${PTEST_DIR_NAME}${i}.code
+        CURRENT_TEST=${PTEST_DIR_NAME}${i}.${ARG2_FILE_EXTENSION}
+        CURRENT_TEST_CODE=${PTEST_DIR_NAME}${i}.${ARG1_FILE_EXTENSION}
         CURRENT_TEST_ANS=${PTEST_DIR_NAME}${i}.ans
         DEST_FILE_NAME=${RES_DIR_NAME}/${FNAME}_${i}.txt
         

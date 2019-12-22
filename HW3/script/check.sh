@@ -118,9 +118,12 @@ run_test_compare_2args(){
     PROGRAM_NAME="$2"
     TEST_SUB_FOLDER="$3"
     TOTAL_TEST="$4"
+    ARG1_FILE_EXTENSION="$5"
+    ARG2_FILE_EXTENSION="$6"
     
-    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
+    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${ARG1_FILE_EXTENSION}" "${ARG2_FILE_EXTENSION}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
 }
+
 
 run_test_without_compare(){
     RUN_TEST="${UTILS}/run_test_without_compare.sh"
@@ -157,6 +160,6 @@ GENERATED_CODE_DIR_NAME=${RES_DIR}/${FNAME}_
 
 run_test_with_checkers "StandardForm" "StandardForm${EXTENSION}" "A" 8 "test_A.py"
 run_test_with_checkers "ParityCheck" "ParityCheck${EXTENSION}" "B" 8 "test_B.py"
-run_test_compare_2args "Encode" "Encode${EXTENSION}" "D" 6
+run_test_compare_2args "Encode" "Encode${EXTENSION}" "D" 6 "code" "dat"
 run_test_without_compare "DecodingTable" "DecodingTable${EXTENSION}" "C" 6
 run_test_with_2input "Decode" "Decode${EXTENSION}" "E" 6 ${GENERATED_CODE_DIR_NAME}

@@ -85,8 +85,8 @@ fi
 echo
 echo "Starting Tests..."
 
+UTILS='../utils'
 run_test_compare(){
-    UTILS='../utils'
     RUN_TEST="${UTILS}/run_test_compare.sh"
     
     PROBLEM_NAME="$1"
@@ -98,7 +98,6 @@ run_test_compare(){
 }
 
 run_test_with_checkers(){
-    UTILS='../utils'
     RUN_TEST="${UTILS}/run_test_with_checkers.sh"
     
     PROBLEM_NAME="$1"
@@ -111,21 +110,23 @@ run_test_with_checkers(){
 }
 
 run_test_compare_2args(){
-    UTILS='../utils'
     RUN_TEST="${UTILS}/run_test_compare_2args.sh"
     
     PROBLEM_NAME="$1"
     PROGRAM_NAME="$2"
     TEST_SUB_FOLDER="$3"
     TOTAL_TEST="$4"
+    ARG1_FILE_EXTENSION="$5"
+    ARG2_FILE_EXTENSION="$6"
     
-    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
+    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${ARG1_FILE_EXTENSION}" "${ARG2_FILE_EXTENSION}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
 }
+
 
 
 run_test_compare "Distrib" "Distrib${EXTENSION}" "A" 2
 run_test_compare "Entropy" "Entropy${EXTENSION}" "B" 2
 run_test_with_checkers "PrefCode" "PrefCode${EXTENSION}" "C" 8 "test_C.py"
 run_test_with_checkers "Huffman" "Huffman${EXTENSION}" "D" 5 "test_D.py"
-run_test_compare_2args "Compress" "Compress${EXTENSION}" "E" 5
-run_test_compare_2args "Decompress" "Decompress${EXTENSION}" "F" 5
+run_test_compare_2args "Compress" "Compress${EXTENSION}" "E" 5 "code" "dat"
+run_test_compare_2args "Decompress" "Decompress${EXTENSION}" "F" 5 "code" "dat"
