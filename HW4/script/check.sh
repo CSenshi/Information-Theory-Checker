@@ -76,8 +76,8 @@ echo "Starting Tests..."
 
 
 
+UTILS='../utils'
 run_test_compare(){
-    UTILS='../utils'
     RUN_TEST="${UTILS}/run_test_compare.sh"
     
     PROBLEM_NAME="$1"
@@ -88,8 +88,21 @@ run_test_compare(){
     $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
 }
 
+run_test_compare_2args(){
+    RUN_TEST="${UTILS}/run_test_compare_2args.sh"
+    
+    PROBLEM_NAME="$1"
+    PROGRAM_NAME="$2"
+    TEST_SUB_FOLDER="$3"
+    TOTAL_TEST="$4"
+    ARG1_FILE_EXTENSION="$5"
+    ARG2_FILE_EXTENSION="$6"
+    
+    $RUN_TEST "${PROBLEM_NAME}" "${PROGRAM_NAME}" "${TEST_SUB_FOLDER}" "${TOTAL_TEST}" "${ARG1_FILE_EXTENSION}" "${ARG2_FILE_EXTENSION}" "${SCRIPT_FOLDER_PATH}" "${TEST_FOLDER_PATH}" "${RESULT_DIR_NAME}" "${INTERPRETER}"
+}
+
 run_test_compare "Parity Check" "ParityCheck${EXTENSION}" "A" 6
-run_test_compare "Encode" "Encode${EXTENSION}" "B" 5
-run_test_compare "Decode" "Decode${EXTENSION}" "C" 10
-run_test_compare "Minimal Polynomial" "MinimalPolynomial${EXTENSION}" "D" 10
-run_test_compare "BCH" "BCH${EXTENSION}" "D" 10
+run_test_compare_2args "Encode" "Encode${EXTENSION}" "B" 6 "pol" "dat"
+run_test_compare_2args "Decode" "Decode${EXTENSION}" "C" 6 "pol" "dat"
+run_test_compare_2args "Minimal Polynomial" "MinimalPolynomial${EXTENSION}" "D" 8 "dat" "pwr"
+run_test_compare_2args "BCH" "BCH${EXTENSION}" "E" 6 "dat" "dst"
